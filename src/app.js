@@ -6,14 +6,14 @@ const productManager = new ProductManager('../data/products.json')
 
 
 app.get( '/products', async ( req, res ) => {
-
-    const result = await productManager.getProducts()
-
-    const limit = req.query.limit; 
-    if ( !result ) throw new Error( 'No se encuentran los producto en este momento!' )
-
-    res.status( 200 ).json({ playload: result.slice( 0, limit ) })
- 
+    try{
+        const result = await productManager.getProducts()
+        const limit = req.query.limit; 
+        
+        res.status( 200 ).json({ playload: result.slice( 0, limit ) })
+    }catch{
+        res.send( 'No se encuentran los productos en este momento!' )
+    }
 })
 
 app.get('/products/:id', async ( req, res ) => {
@@ -23,7 +23,7 @@ app.get('/products/:id', async ( req, res ) => {
         return res.status( 200 ).json({ playload: result})
 
     }catch{
-        return res.send({ error: `no se encuntra el id espacificado en el param: ${ id }` })
+        return res.send({ error: `No se encuntra el id espacificado en el URL param: ${ id }` })
     }
 })
 
